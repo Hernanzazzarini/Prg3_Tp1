@@ -58,9 +58,11 @@ async function agregarPersonajeAPI() {
 //Items 1)c
 async function buscarPorId(id) {
   try {
-    if (id === undefined || id === null) {
-      throw new Error("ID inválido");
+    if (id === undefined || id === null || isNaN(id))  { //Esta mejora evita que se pasen valores invalidos que no sean numeros y previene errores
+      console.log("El ID ingresado no es valido.Debe ser un numero.");
+      return;
     }
+    id = Number(id);
 
     const res = await fetch(`https://thronesapi.com/api/v2/Characters/${id}`);
     if (!res.ok) throw new Error(`Personaje con ID ${id} no encontrado`);
@@ -190,6 +192,7 @@ async function main() {
   const personajes = await obtenerPersonajes();
   await agregarPersonajeAPI();
   await buscarPorId(52);
+  await buscarPorId("abc");
   await guardarPersonajes(personajes);
 
   await agregarPersonajeAlFinal();
